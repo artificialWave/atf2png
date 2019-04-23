@@ -17,6 +17,7 @@
   "scripts": {
     "start": "node dist/index.js",
     "dotnet-publish": "dotnet publish ./ATF2PNG -c Release -o ../dist/ATF2PNG",
-    "build": "gulp build"
+    "build": "gulp build",
+    "test": "node dist/test.js"
   }
 }

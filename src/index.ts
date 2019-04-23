@@ -1,20 +1,20 @@
 import * as child from "child_process";
 import * as path from "path"
 
-const spawn = child.spawn;
 
-let executable = path.join(__dirname, "./ATF2PNG/ATF2PNG.dll");
 
-let dotnet = spawn('dotnet', [executable]);
+let convert = function(input:string, output: string = null){
+    return new Promise((resolve, reject) =>{
+        const exec = child.exec;
 
-dotnet.stdout.on('data', (data) => {
-    console.log(`stdout: ${data}`);
-});
+        let executable = path.join(__dirname, "./ATF2PNG/ATF2PNG.dll");
+    
+        let process = exec("dotnet "+executable+" "+input, function(err, stdout, stderr) {
+            if (err) throw err;
+            else if (stderr) reject(stderr);
+            else resolve(stdout);
+        });
+    });
+}
 
-dotnet.stderr.on('data', (data) => {
-    console.log(`stderr: ${data}`);
-});
-
-dotnet.on('close', (code) => {
-    console.log(`child process exited with code ${code}`);
-});
+export {convert};

@@ -84,6 +84,7 @@ typings/
 .dynamodb/
 
 .vscode
+.vs
 
 # Build results
 [Dd]ebug/

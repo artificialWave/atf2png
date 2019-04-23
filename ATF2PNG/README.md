@@ -1,0 +1,1 @@
+Slightly edited version of [Gl0/atf2png](https://github.com/Gl0/atf2png) to be used with dotnet core for platform independent use.

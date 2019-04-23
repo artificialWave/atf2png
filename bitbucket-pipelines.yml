@@ -17,4 +17,4 @@ pipelines:
           - npm run build
           - dotnet --info
           - dotnet ./dist/ATF2PNG/ATF2PNG.dll
-          - npm run start
+          - npm run test

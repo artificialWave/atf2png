@@ -2,15 +2,18 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const child = require("child_process");
 const path = require("path");
-const spawn = child.spawn;
-let executable = path.join(__dirname, "./ATF2PNG/ATF2PNG.dll");
-let dotnet = spawn('dotnet', [executable]);
-dotnet.stdout.on('data', (data) => {
-    console.log(`stdout: ${data}`);
-});
-dotnet.stderr.on('data', (data) => {
-    console.log(`stderr: ${data}`);
-});
-dotnet.on('close', (code) => {
-    console.log(`child process exited with code ${code}`);
-});
+let convert = function (input, output = null) {
+    return new Promise((resolve, reject) => {
+        const exec = child.exec;
+        let executable = path.join(__dirname, "./ATF2PNG/ATF2PNG.dll");
+        let process = exec("dotnet " + executable + " " + input, function (err, stdout, stderr) {
+            if (err)
+                throw err;
+            else if (stderr)
+                reject(stderr);
+            else
+                resolve(stdout);
+        });
+    });
+};
+exports.convert = convert;
