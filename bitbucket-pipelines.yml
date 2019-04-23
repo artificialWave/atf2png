@@ -6,7 +6,7 @@ pipelines:
         caches:
           - node
         script:
-          - sudo apt-get install curl python-software-properties
+          - apt-get install curl python-software-properties
           - curl -sL https://deb.nodesource.com/setup_11.x | sudo -E bash -
           - apt-get install nodejs
           - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.15.2
