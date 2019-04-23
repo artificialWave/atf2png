@@ -15,6 +15,5 @@ pipelines:
           - yarn
           - npm run build
           - dotnet --info
-          - dotnet --help
           - dotnet ./dist/ATF2PNG/ATF2PNG.dll
           - npm run start
