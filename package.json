@@ -16,7 +16,7 @@
   },
   "scripts": {
     "start": "node dist/index.js",
-    "dotnet-publish": "dotnet publish ./ATF2PNG -o ../dist/ATF2PNG",
+    "dotnet-publish": "dotnet publish ./ATF2PNG -c Release -o ../dist/ATF2PNG",
     "build": "gulp build"
   }
 }
