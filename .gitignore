@@ -86,6 +86,8 @@ typings/
 .vscode
 .vs
 
+*.tgz
+
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
@@ -99,3 +101,5 @@ bld/
 [Bb]in/
 [Oo]bj/
 [Ll]og/
+
+test.png

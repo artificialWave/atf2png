@@ -19,5 +19,15 @@
     "dotnet-publish": "dotnet publish ./ATF2PNG -c Release -o ../dist/ATF2PNG",
     "build": "gulp build",
     "test": "node dist/test.js"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://Sepherane@bitbucket.org/Sepherane/atf2png.git"
+  },
+  "author": "Sepherane",
+  "homepage": "https://bitbucket.org/Sepherane/atf2png#readme",
+  "engines":{
+    "node": ">= 11.7.0"
+  },
+  "files":["dist/*", "LICENSE", "package.json", "README.md"]
 }
