@@ -5,6 +5,7 @@ pipelines:
     - step:
         caches:
           - dotnetcore
+          - node
         script:
           - apt-get update
           - apt-get install -y curl software-properties-common
