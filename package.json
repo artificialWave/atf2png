@@ -1,6 +1,6 @@
 {
   "name": "atf2png",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Convert ATF to PNG files",
   "main": "dist/index.js",
   "license": "MIT",
@@ -22,10 +22,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://Sepherane@bitbucket.org/Sepherane/atf2png.git"
+    "url": "git+https://github.com/Sepherane/atf2png.git"
   },
   "author": "Sepherane",
-  "homepage": "https://bitbucket.org/Sepherane/atf2png#readme",
+  "homepage": "https://github.com/Sepherane/atf2png.git#readme",
   "engines":{
     "node": ">= 11.7.0"
   },
