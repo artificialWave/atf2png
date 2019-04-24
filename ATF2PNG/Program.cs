@@ -2,44 +2,60 @@
 using System.Drawing.Imaging;
 using System.IO;
 using Atf;
+using CommandLine;
 
 namespace atf2png
 {
+    class Options
+    {
+        [Option('o', "output", Required = false, HelpText = "Output file name")]
+        public string Output { get; set; }
+
+        [Option('a', "atlas", Required = false, HelpText = "Atlas to be used")]
+        public string Atlas { get; set; }
+
+        [Value(0, MetaName = "input file",
+            HelpText = "Input ATF file to be processed.",
+            Required = true)]
+        public string FileName { get; set; }
+
+    }
     class Program
     {
-        static void Main(string[] args) {
-            if (args.Length < 1 || args.Length > 2) {
-                Console.WriteLine("\r\nUsage: atf2png test.atf [atlas.xml]\r\n");
-                Console.WriteLine("Parameters:\r\ntest.atf      Path to .atf file to extract");
-                Console.WriteLine(               "atlas.xml     Path to texture atlas .xml file (optional)");
-                Console.WriteLine(               "              If atlas is not specified, program will look ");
-                Console.WriteLine(               "              for .xml file with same name as atf one (test.xml in example)\r\n");
-                Console.WriteLine(               "              If no texture atlas found - full image will be saved as test.png");
-                Console.WriteLine(               "              otherwise all subtextures will be saved in the folder 'test'");
-                return;
-            }
-            var atfname = args[0];
-            if (!File.Exists(atfname)) {
-                Console.WriteLine("File "+atfname+" not found!");
-                return;
-            }
-            ATFReader atf;
-            try { using (FileStream atFileStream = new FileStream(atfname, FileMode.Open, FileAccess.Read)) { atf = new ATFReader(atFileStream); } }
-            catch(Exception e) { Console.WriteLine(e.Message);return;}
-            string xmlFileName;
-            var nameWithoutExtension = Path.Combine(Path.GetDirectoryName(atfname), Path.GetFileNameWithoutExtension(atfname));
-            if (args.Length == 2) xmlFileName = args[1];
-            else xmlFileName = nameWithoutExtension + ".xml";
-            if (!File.Exists(xmlFileName)) {
-                Console.WriteLine("Saving " + nameWithoutExtension + ".png");
-                atf.Bitmap.Save(nameWithoutExtension + ".png", ImageFormat.Png); return;
-            }
-            var xml = File.ReadAllText(xmlFileName);
-            Atlas atlas = new Atlas(xml, atf.Bitmap);
-            if (!atlas.Correct) { Console.WriteLine("Incorrect atlas!"); return; }
-            Directory.CreateDirectory(nameWithoutExtension);
-            Console.WriteLine("Saving textures into " + nameWithoutExtension);
-            atlas.Names().ForEach(x => atlas.GetTexture(x).Save(Path.Combine(nameWithoutExtension, x + ".png")));
+        static void Main(string[] args)
+        {
+            Parser.Default.ParseArguments<Options>(args)
+                .WithParsed<Options>(o =>
+                {
+                    if (!File.Exists(o.FileName))
+                    {
+                        Console.WriteLine("File " + o.FileName + " not found!");
+                        return;
+                    }
+                    if(o.Output != null && Path.GetExtension(o.Output) != ".png"){
+                        Console.WriteLine("Output file is not a png file");
+                        return;
+                    }
+                    ATFReader atf;
+                    try { using (FileStream atFileStream = new FileStream(o.FileName, FileMode.Open, FileAccess.Read)) { atf = new ATFReader(atFileStream); } }
+                    catch (Exception e) { Console.WriteLine(e.Message); return; }
+                    string xmlFileName;
+                    var nameWithoutExtension = Path.Combine(Path.GetDirectoryName(o.FileName), Path.GetFileNameWithoutExtension(o.FileName));
+                    if (o.Atlas != null) xmlFileName = o.Atlas;
+                    else xmlFileName = nameWithoutExtension + ".xml";
+                    if (!File.Exists(xmlFileName))
+                    {
+                        string outFile = o.Output!=null?o.Output:nameWithoutExtension + ".png";
+                        Console.WriteLine("Saving " + outFile);
+                        atf.Bitmap.Save(outFile, ImageFormat.Png); return;
+                    }
+                    var xml = File.ReadAllText(xmlFileName);
+                    Atlas atlas = new Atlas(xml, atf.Bitmap);
+                    if (!atlas.Correct) { Console.WriteLine("Incorrect atlas!"); return; }
+                    Directory.CreateDirectory(nameWithoutExtension);
+                    Console.WriteLine("Saving textures into " + nameWithoutExtension);
+                    atlas.Names().ForEach(x => atlas.GetTexture(x).Save(Path.Combine(nameWithoutExtension, x + ".png")));
+                });
         }
     }
 }
